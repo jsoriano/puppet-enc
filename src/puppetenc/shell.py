@@ -54,11 +54,18 @@ class PuppetEncShell(Cmd):
 
     def do_list_groups(self, line):
         """
-        Lists existing groups
+        Lists existing groups, and its classes
+        list_host [<host>]
         """
-        groups = self.session.query(models.Group).all()
+        if line:
+            group_name = line[0]
+            groups = self.session.query(models.Group).filter_by(name=group_name).all()
+        else:
+            groups = self.session.query(models.Group).all()
         for group in groups:
             print group.name
+            for puppetClass in group.classes:
+                print " - %s" % puppetClass.name
 
     def do_add_group(self, line):
         """
@@ -81,6 +88,24 @@ class PuppetEncShell(Cmd):
         else:
             print "Group '%s' doesn't exist" % group_name
 
+    def do_list_hosts(self, line):
+        """
+        List hosts, its groups and its classes
+        list_hosts [<host>]
+        """
+        if line:
+            host_name = line[0]
+            hosts = self.session.query(models.Host).filter_by(name=host_name).all()
+        else:
+            hosts = self.session.query(models.Host).all()
+
+        for host in hosts:
+            print host.name
+            for group in host.groups:
+                print " - %s" % group.name
+                for puppetClass in group.classes:
+                    print "  - %s" % puppetClass.name
+
     def do_add_host(self, line):
         """
         Adds a host to a group
@@ -96,7 +121,25 @@ class PuppetEncShell(Cmd):
             host = models.Host(name=host_name)
             self.session.add(host)
         host.groups.append(group)
-        print host.groups
+
+    def do_del_host(self, line):
+        """
+        Removes a host from a group
+        del_host <host> <group>
+        """
+        host_name, group_name = line
+        host = self.session.query(models.Host).filter_by(name=host_name).first()
+        if not host:
+            print "Host '%s' doesn't exist" % group_name
+            return
+        group = self.session.query(models.Group).filter_by(name=group_name).first()
+        if not group:
+            print "Group '%s' doesn't exist" % group_name
+            return
+        host.groups.remove(group)
+        if not host.groups:
+            print "Host '%s' doesn't bellows to any group, removing..." % host_name
+            self.session.delete(host)                
 
 class PuppetEncOneCmd(PuppetEncShell):
     def onecmd(self, line):
