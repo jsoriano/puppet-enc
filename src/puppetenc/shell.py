@@ -9,9 +9,13 @@ class PuppetEncShell(Cmd):
     intro = 'Manage External Node Classification Database for Puppet'
     prompt = '> '
 
-    def __init__(self, *args, **kwargs):
-        Cmd.__init__(self, *args, **kwargs)
+    def preloop(self):
         self.session = Session()
+
+    def postloop(self):
+        self.session.commit()
+        self.session.close()
+        self.session = None
 
     def postcmd(self, stop, line):
         try:
@@ -94,10 +98,23 @@ class PuppetEncShell(Cmd):
         host.groups.append(group)
         print host.groups
 
+class PuppetEncOneCmd(PuppetEncShell):
+    def onecmd(self, line):
+        self.session = Session()
+        ret = None
+        try:
+            ret = Cmd.onecmd(self, line)
+            self.session.commit()
+        except Exception, e:
+            print e
+        finally:
+            self.session.close()
+        return ret
+
 if __name__ == '__main__':
     import sys
     shell = PuppetEncShell()
     if len(sys.argv) > 1:
-        shell.onecmd(' '.join(sys.argv[1:]))
+        PuppetEncOneCmd().onecmd(' '.join(sys.argv[1:]))
     else:
-        shell.cmdloop()
+        PuppetEncShell().cmdloop()
