@@ -10,13 +10,13 @@ from sqlalchemy.orm import relation, object_session
 Base = declarative_base()
 
 host_groups = Table('host_group', Base.metadata,
-    Column('host_id', Integer, ForeignKey('host.id')),
-    Column('group_id', Integer, ForeignKey('group.id')),
+    Column('host_id', Integer, ForeignKey('host.id'), primary_key=True, nullable=False),
+    Column('group_id', Integer, ForeignKey('group.id'), primary_key=True, nullable=False),
 )
 
 group_classes = Table('group_class', Base.metadata,
-    Column('group_id', Integer, ForeignKey('group.id')),
-    Column('class_id', Integer, ForeignKey('class.id')),
+    Column('group_id', Integer, ForeignKey('group.id'), primary_key=True, nullable=False),
+    Column('class_id', Integer, ForeignKey('class.id'), primary_key=True, nullable=False),
 )
 
 class Host(Base):
