@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, ForeignKey, String, Column, Table
+from sqlalchemy import Integer, ForeignKey, String, Column, Table, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relation, object_session
 
@@ -22,7 +22,7 @@ group_classes = Table('group_class', Base.metadata,
 class Host(Base):
     __tablename__ = 'host'
     id = Column(Integer, primary_key=True)
-    name = Column(String)
+    name = Column(Text, nullable=False, unique=True)
     groups = relation('Group', secondary=host_groups)
 
     def _get_classes(self):
@@ -35,10 +35,10 @@ class Host(Base):
 class Group(Base):
     __tablename__ = 'group'
     id = Column(Integer, primary_key=True)
-    name = Column(String)
+    name = Column(Text, nullable=False, unique=True)
     classes = relation('Class', secondary=group_classes)
 
 class Class(Base):
     __tablename__ = 'class'
     id = Column(Integer, primary_key=True)
-    name = Column(String)
+    name = Column(Text, nullable=False, unique=True)
