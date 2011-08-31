@@ -26,10 +26,11 @@ class Host(Base):
     groups = relation('Group', secondary=host_groups)
 
     def _get_classes(self):
-        classes = set()
+        # TODO: Very optimizable
+        classes = []
         for group in self.groups:
             classes += group.classes
-        return sorted(classes)
+        return sorted(set(classes))
     classes = property(_get_classes)
 
 class Group(Base):

@@ -130,7 +130,7 @@ class PuppetEncShell(Cmd):
         host_name, group_name = line
         host = self.session.query(models.Host).filter_by(name=host_name).first()
         if not host:
-            print "Host '%s' doesn't exist" % group_name
+            print "Host '%s' doesn't exist" % host_name
             return
         group = self.session.query(models.Group).filter_by(name=group_name).first()
         if not group:
@@ -140,6 +140,38 @@ class PuppetEncShell(Cmd):
         if not host.groups:
             print "Host '%s' doesn't bellows to any group, removing..." % host_name
             self.session.delete(host)                
+
+    def do_add_class(self, line):
+        """
+        Adds a class to a group
+        add_class <class> <group>
+        """
+        class_name, group_name = line
+        puppetClass = self.session.query(models.Class).filter_by(name=class_name).first()
+        group = self.session.query(models.Group).filter_by(name=group_name).first()
+        if not group:
+            print "Group '%s' doesn't exist" % group_name
+            return
+        if not puppetClass:
+            puppetClass = models.Class(name=class_name)
+            self.session.add(puppetClass)
+        group.classes.append(puppetClass)
+
+    def do_del_class(self, line):
+        """
+        Removes a class from a group
+        del_class <class> <group>
+        """
+        class_name, group_name = line
+        puppetClass = self.session.query(models.Class).filter_by(name=class_name).first()
+        if not puppetClass:
+            print "Class '%s' doesn't exist" % group_name
+            return
+        group = self.session.query(models.Group).filter_by(name=group_name).first()
+        if not group:
+            print "Group '%s' doesn't exist" % group_name
+            return
+        group.classes.remove(puppetClass)
 
 class PuppetEncOneCmd(PuppetEncShell):
     def onecmd(self, line):
