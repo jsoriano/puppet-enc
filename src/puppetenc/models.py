@@ -1,3 +1,6 @@
+# Copyright (c) 2011 Tuenti Technologies
+# See LICENSE for details
+
 from sqlalchemy import Integer, ForeignKey, String, Column, Table, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relation, object_session

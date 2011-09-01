@@ -1,3 +1,6 @@
+# Copyright (c) 2011 Tuenti Technologies
+# See LICENSE for details
+
 import shlex
 
 from cmd import Cmd

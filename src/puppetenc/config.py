@@ -1,3 +1,6 @@
+# Copyright (c) 2011 Tuenti Technologies
+# See LICENSE for details
+
 import os
 
 if 'PUPPET_ENC_SETTINGS' in os.environ:
