@@ -1,0 +1,17 @@
+Source: puppet-enc
+Section: python
+Priority: optional
+Maintainer: Jaime Soriano <jsoriano@tuenti.com>
+Build-Depends: debhelper (>=7.0), python-support (>= 0.6), cdbs (>= 0.4.49), python-all-dev
+XS-Python-Version: >=2.4
+Standards-Version: 3.8.4
+
+Package: python-puppetenc
+Architecture: all
+Homepage: https://github.com/jsoriano/puppet-enc
+XB-Python-Version: ${python:Versions}
+Depends: ${misc:Depends}, ${python:Depends}
+Recommends: puppet
+Description: Generic external node classifier for puppet
+ Tool to maintain a database with external node classification information
+ to be used with puppet
