@@ -185,8 +185,7 @@ class PuppetEncOneCmd(PuppetEncShell):
             self.session.commit()
         except Exception, e:
             print e
-        finally:
-            self.session.close()
+        self.session.close()
         return ret
 
 if __name__ == '__main__':

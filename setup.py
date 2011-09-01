@@ -12,4 +12,10 @@ setup(name='puppet-enc',
     license='MIT',
     package_dir={'': 'src'},
     packages=['puppetenc'],
+    scripts=[
+        'scripts/puppet-enc',
+    ],
+    data_files=[
+        ('/etc/puppet-enc', ['etc/enc_settings.py']),
+    ],
 )

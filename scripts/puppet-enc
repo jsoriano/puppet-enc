@@ -1,0 +1,15 @@
+#!/bin/bash
+
+export PYTHONPATH=/etc/puppet-enc
+export PUPPET_ENC_SETTINGS=enc_settings
+
+while getopts "s" OPTION; do
+	case $OPTION in
+		s)
+			python -m puppetenc.shell
+			exit
+			;;
+	esac
+done
+
+python -m puppetenc.enc "$1"
