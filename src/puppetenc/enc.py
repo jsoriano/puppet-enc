@@ -14,12 +14,18 @@ def get_host(host_name):
             if re.match(host.name, host_name):
                 return host
     if not host:
-        # XXX: get default
-        pass
+        host = Session().query(models.Host).filter_by(name='default').first()
 
 def dump_yaml(host_name):
     host = get_host(host_name)
-    return "classes:\n" + "\n".join(("  %s:" % puppetClass.name for puppetClass in host.classes))
+    classes = []
+    if host:
+        classes = host.classes
+    else:
+        default_group = Session().query(models.Group).filter_by(name='default').first()
+        if default_group:
+            classes = default_group.classes
+    return "classes:\n" + "\n".join(("  %s:" % puppetClass.name for puppetClass in classes))
 
 if __name__ == '__main__':
     print dump_yaml(sys.argv[1])
