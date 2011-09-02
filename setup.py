@@ -1,7 +1,10 @@
 # Copyright (c) 2011 Tuenti Technologies
 # See LICENSE for details
 
+import os.path
+
 from distutils.core import setup
+from distutils.sysconfig import get_python_lib
 
 setup(name='puppet-enc',
     version='0.6',
@@ -14,11 +17,17 @@ setup(name='puppet-enc',
     packages=[
         'puppetenc',
         'puppetenc.migrations',
+        'puppetenc.migrations.versions',
     ],
     scripts=[
         'scripts/puppet-enc',
     ],
     data_files=[
-        ('/etc/puppet-enc', ['etc/enc_settings.py']),
+        ('/etc/puppet-enc', [
+            'etc/enc_settings.py'
+        ]),
+        (os.path.join(get_python_lib(), 'puppetenc/migrations'), [
+            'src/puppetenc/migrations/migrate.cfg'
+        ]),
     ],
 )

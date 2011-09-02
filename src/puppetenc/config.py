@@ -9,13 +9,21 @@ else:
     import puppetenc.default_settings as settings
 
 from puppetenc import models
+from puppetenc.migrations import manage
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+
+import migrate.versioning
 
 engine = create_engine(settings.db_url)
 Session = sessionmaker(engine)
 
 models.Base.metadata.bind = engine
 models.Base.metadata.create_all()
-# TODO: check/run migrations
+
+try:
+    manage.version_control()
+except migrate.versioning.exceptions.DatabaseAlreadyControlledError:
+    pass
+manage.upgrade()
