@@ -1,3 +1,9 @@
+puppet-enc (1.0) UNRELEASED; urgency=low
+
+  * 1.0 release
+
+ -- Jaime Soriano Pastor <jsoriano@tuenti.com>  Fri, 02 Sep 2011 15:39:29 +0200
+
 puppet-enc (0.6) UNRELEASED; urgency=low
 
   * Migrations system added

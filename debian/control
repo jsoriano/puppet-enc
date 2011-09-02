@@ -10,7 +10,7 @@ Package: python-puppetenc
 Architecture: all
 Homepage: https://github.com/jsoriano/puppet-enc
 XB-Python-Version: ${python:Versions}
-Depends: ${misc:Depends}, ${python:Depends}, python-sqlalchemy
+Depends: ${misc:Depends}, ${python:Depends}, python-sqlalchemy, python-migrate
 Recommends: puppet
 Description: Generic external node classifier for puppet
  Tool to maintain a database with external node classification information

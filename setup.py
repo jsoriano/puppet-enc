@@ -7,7 +7,7 @@ from distutils.core import setup
 from distutils.sysconfig import get_python_lib
 
 setup(name='puppet-enc',
-    version='0.6',
+    version='1.0',
     description='Generic external node classifier for puppet',
     author='Jaime Soriano Pastor',
     author_email='jsoriano@tuenti.com',

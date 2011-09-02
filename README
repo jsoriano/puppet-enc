@@ -1,0 +1,54 @@
+Puppet external node classifier
+===============================
+
+Implementation of a external node classifier that stores
+the node relations with the modules in a database that
+can be modified directly with SQL, using the provided API
+or with the shell.
+
+
+Usage
+-----
+
+Basic usage to request the classes of a node:
+
+   $ puppet-enc <node>
+
+To configure the database with the shell, run:
+
+   $ puppet-enc -s
+
+The shell includes inline help.
+
+Nodes, groups and classes are strings, nodes can also be
+regular expressions.
+
+
+Configuration
+-------------
+
+Puppet ENC is configured using a python module, you have
+to specify it using the PUPPET_ENC_SETTINGS environment
+variable, and the modules has to be included in the
+PYTHONPATH.
+
+The default configuration uses `:memory:` as sqlite
+database, it is completely useless, but it works :)
+
+Another system-wide configuration is included in
+`/etc/puppet-enc` that stores everything in a database
+in `/etc/puppet-enc/enc.db`. This configuration is the one
+used by the `puppet-enc` script.
+
+If you want to have several configurations in the same
+server, you can set PUPPET_ENC_SETTINGS and PYTHONPATH
+according to your profiles and invoke the modules
+directly:
+
+	$ python -m puppetenc.shell
+
+or
+
+	$ python -m puppetenc.enc <node>
+
+
