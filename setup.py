@@ -4,7 +4,7 @@
 from distutils.core import setup
 
 setup(name='puppet-enc',
-    version='0.5',
+    version='0.6',
     description='Generic external node classifier for puppet',
     author='Jaime Soriano Pastor',
     author_email='jsoriano@tuenti.com',
