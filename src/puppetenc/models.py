@@ -5,11 +5,6 @@ from sqlalchemy import Integer, ForeignKey, String, Column, Table, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relation, object_session
 
-#from sqlalchemy import create_engine
-#engine = create_engine('sqlite:///:memory:', echo=True)
-#from sqlalchemy.orm import sessionmaker
-#session = sessionmaker(engine)()
-
 Base = declarative_base()
 
 node_groups = Table('node_group', Base.metadata,
