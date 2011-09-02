@@ -57,8 +57,8 @@ class PuppetEncShell(Cmd):
 
     def do_list_groups(self, line):
         """
-        Lists existing groups, and its classes
-        list_host [<host>]
+        Lists existing groups, and its modules
+        list_node [<node>]
         """
         if line:
             group_name = line[0]
@@ -67,8 +67,8 @@ class PuppetEncShell(Cmd):
             groups = self.session.query(models.Group).all()
         for group in groups:
             print group.name
-            for puppetClass in group.classes:
-                print " - %s" % puppetClass.name
+            for module in group.modules:
+                print " - %s" % module.name
 
     def do_add_group(self, line):
         """
@@ -91,90 +91,90 @@ class PuppetEncShell(Cmd):
         else:
             print "Group '%s' doesn't exist" % group_name
 
-    def do_list_hosts(self, line):
+    def do_list_nodes(self, line):
         """
-        List hosts, its groups and its classes
-        list_hosts [<host>]
+        List nodes, its groups and its modules
+        list_nodes [<node>]
         """
         if line:
-            host_name = line[0]
-            hosts = self.session.query(models.Host).filter_by(name=host_name).all()
+            node_name = line[0]
+            nodes = self.session.query(models.Node).filter_by(name=node_name).all()
         else:
-            hosts = self.session.query(models.Host).all()
+            nodes = self.session.query(models.Node).all()
 
-        for host in hosts:
-            print host.name
-            for group in host.groups:
+        for node in nodes:
+            print node.name
+            for group in node.groups:
                 print " - %s" % group.name
-                for puppetClass in group.classes:
-                    print "  - %s" % puppetClass.name
+                for module in group.modules:
+                    print "  - %s" % module.name
 
-    def do_add_host(self, line):
+    def do_add_node(self, line):
         """
-        Adds a host to a group
-        add_host <host> <group>
+        Adds a node to a group
+        add_node <node> <group>
         """
-        host_name, group_name = line
-        host = self.session.query(models.Host).filter_by(name=host_name).first()
+        node_name, group_name = line
+        node = self.session.query(models.Node).filter_by(name=node_name).first()
         group = self.session.query(models.Group).filter_by(name=group_name).first()
         if not group:
             print "Group '%s' doesn't exist" % group_name
             return
-        if not host:
-            host = models.Host(name=host_name)
-            self.session.add(host)
-        host.groups.append(group)
+        if not node:
+            node = models.Node(name=node_name)
+            self.session.add(node)
+        node.groups.append(group)
 
-    def do_del_host(self, line):
+    def do_del_node(self, line):
         """
-        Removes a host from a group
-        del_host <host> <group>
+        Removes a node from a group
+        del_node <node> <group>
         """
-        host_name, group_name = line
-        host = self.session.query(models.Host).filter_by(name=host_name).first()
-        if not host:
-            print "Host '%s' doesn't exist" % host_name
-            return
-        group = self.session.query(models.Group).filter_by(name=group_name).first()
-        if not group:
-            print "Group '%s' doesn't exist" % group_name
-            return
-        host.groups.remove(group)
-        if not host.groups:
-            print "Host '%s' doesn't bellows to any group, removing..." % host_name
-            self.session.delete(host)                
-
-    def do_add_class(self, line):
-        """
-        Adds a class to a group
-        add_class <class> <group>
-        """
-        class_name, group_name = line
-        puppetClass = self.session.query(models.Class).filter_by(name=class_name).first()
-        group = self.session.query(models.Group).filter_by(name=group_name).first()
-        if not group:
-            print "Group '%s' doesn't exist" % group_name
-            return
-        if not puppetClass:
-            puppetClass = models.Class(name=class_name)
-            self.session.add(puppetClass)
-        group.classes.append(puppetClass)
-
-    def do_del_class(self, line):
-        """
-        Removes a class from a group
-        del_class <class> <group>
-        """
-        class_name, group_name = line
-        puppetClass = self.session.query(models.Class).filter_by(name=class_name).first()
-        if not puppetClass:
-            print "Class '%s' doesn't exist" % group_name
+        node_name, group_name = line
+        node = self.session.query(models.Node).filter_by(name=node_name).first()
+        if not node:
+            print "Node '%s' doesn't exist" % node_name
             return
         group = self.session.query(models.Group).filter_by(name=group_name).first()
         if not group:
             print "Group '%s' doesn't exist" % group_name
             return
-        group.classes.remove(puppetClass)
+        node.groups.remove(group)
+        if not node.groups:
+            print "Node '%s' doesn't bellows to any group, removing..." % node_name
+            self.session.delete(node)                
+
+    def do_add_module(self, line):
+        """
+        Adds a module to a group
+        add_module <module> <group>
+        """
+        module_name, group_name = line
+        module = self.session.query(models.Module).filter_by(name=module_name).first()
+        group = self.session.query(models.Group).filter_by(name=group_name).first()
+        if not group:
+            print "Group '%s' doesn't exist" % group_name
+            return
+        if not module:
+            module = models.Module(name=module_name)
+            self.session.add(module)
+        group.modules.append(module)
+
+    def do_del_module(self, line):
+        """
+        Removes a module from a group
+        del_module <module> <group>
+        """
+        module_name, group_name = line
+        module = self.session.query(models.Module).filter_by(name=module_name).first()
+        if not module:
+            print "Module '%s' doesn't exist" % group_name
+            return
+        group = self.session.query(models.Group).filter_by(name=group_name).first()
+        if not group:
+            print "Group '%s' doesn't exist" % group_name
+            return
+        group.modules.remove(module)
 
 class PuppetEncOneCmd(PuppetEncShell):
     def onecmd(self, line):

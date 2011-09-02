@@ -12,37 +12,37 @@ from sqlalchemy.orm import relation, object_session
 
 Base = declarative_base()
 
-host_groups = Table('host_group', Base.metadata,
-    Column('host_id', Integer, ForeignKey('host.id'), primary_key=True, nullable=False),
+node_groups = Table('node_group', Base.metadata,
+    Column('node_id', Integer, ForeignKey('node.id'), primary_key=True, nullable=False),
     Column('group_id', Integer, ForeignKey('group.id'), primary_key=True, nullable=False),
 )
 
-group_classes = Table('group_class', Base.metadata,
+group_modules = Table('group_module', Base.metadata,
     Column('group_id', Integer, ForeignKey('group.id'), primary_key=True, nullable=False),
-    Column('class_id', Integer, ForeignKey('class.id'), primary_key=True, nullable=False),
+    Column('module_id', Integer, ForeignKey('module.id'), primary_key=True, nullable=False),
 )
 
-class Host(Base):
-    __tablename__ = 'host'
+class Node(Base):
+    __tablename__ = 'node'
     id = Column(Integer, primary_key=True)
     name = Column(Text, nullable=False, unique=True)
-    groups = relation('Group', secondary=host_groups)
+    groups = relation('Group', secondary=node_groups)
 
-    def _get_classes(self):
+    def _get_modules(self):
         # TODO: Very optimizable
-        classes = []
+        modules = []
         for group in self.groups:
-            classes += group.classes
-        return sorted(set(classes))
-    classes = property(_get_classes)
+            modules += group.modules
+        return sorted(set(modules))
+    modules = property(_get_modules)
 
 class Group(Base):
     __tablename__ = 'group'
     id = Column(Integer, primary_key=True)
     name = Column(Text, nullable=False, unique=True)
-    classes = relation('Class', secondary=group_classes)
+    modules = relation('Module', secondary=group_modules)
 
-class Class(Base):
-    __tablename__ = 'class'
+class Module(Base):
+    __tablename__ = 'module'
     id = Column(Integer, primary_key=True)
     name = Column(Text, nullable=False, unique=True)
