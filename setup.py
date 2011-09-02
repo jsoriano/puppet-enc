@@ -11,7 +11,10 @@ setup(name='puppet-enc',
     url='https://github.com/jsoriano/puppet-enc',
     license='MIT',
     package_dir={'': 'src'},
-    packages=['puppetenc'],
+    packages=[
+        'puppetenc',
+        'puppetenc.migrations',
+    ],
     scripts=[
         'scripts/puppet-enc',
     ],
